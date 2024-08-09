@@ -1,26 +1,68 @@
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
+import styles from './App.module.css'
+import logo from './assets/logo.svg';
+import Input from './components/input';
+import Button from './components/button';
+import Counter from './components/counter';
+import Task from './components/task';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [inputText, setInputText] = useState('');
+  const [newTasks, setNewTasks] = useState<string[]>([]);
+  const [completeTasks, setCompleteTasks] = useState<string[]>([]);
 
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log({ event });
+    setInputText(event.target.value);
+  };
+
+  const handleCreateTask = () => {
+    if (newTasks.includes(inputText)) window.alert('Tarefa já adicionada.');
+    else if (inputText) {
+      setNewTasks([...newTasks, inputText]);
+      setInputText('');
+    }
+  };
+
+  const handleCompleteTask = (task: string) => {
+    if (task) {
+      setNewTasks(newTasks.filter((currentTask) => currentTask !== task ));
+      setCompleteTasks([...completeTasks, task]);
+    }
+  };
+  
   return (
-    <>
-      <div>
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <img src={logo} alt="logo" />
+      </header>
+      <div className={styles.inputWrapper}>
+        <Input placeholder="Adicione uma nova tarefa" onKeyDown={(e) => { if (e.key === 'Enter') handleCreateTask()}} onChange={handleInputChange}/>
+        <Button text="Criar" onClick={handleCreateTask} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      
+      <div className={styles.textWrapper}>
+        <div>
+          <p> Tarefas criadas </p>
+          <Counter text={newTasks.length.toString()} />
+        </div>
+        <div>
+          <p> Tarefas Concluídas </p>
+          <Counter text={completeTasks.length.toString()} />
+        </div>  
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+
+      <section>
+        {newTasks.map((task) => (
+          <Task isChecked={completeTasks.includes(task)} text={task} key={task} onClick={() => handleCompleteTask(task)} />
+        ))}
+          {completeTasks.map((task) => (
+          <Task isChecked={completeTasks.includes(task)} text={task} key={task} onClick={() => setInputText(task)} />
+        ))}
+      </section>
+    </div>
   )
 }
 
-export default App
+export default App;
+

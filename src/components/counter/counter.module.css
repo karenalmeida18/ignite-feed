@@ -1,0 +1,7 @@
+.container {
+    background-color: var(--gray-400);
+    color: var(--gray-200);
+    font-weight: bold;
+    border-radius: 30px;
+    padding: 4px 10px;
+}

@@ -1,0 +1,22 @@
+.container {
+    background-color: var(--gray-500);
+    color: var(--gray-100);
+    border-radius: 8px;
+    padding: 16px;
+    width: 700px;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+
+    > div {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+}
+
+.container:hover {
+  opacity: 0.5;
+}
